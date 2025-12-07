@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Términos de Servicio - Vintara Logistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        body.light-mode {
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode {
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode header {
+            background-color: rgba(15, 15, 15, 0.98);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            height: 50px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-center a {
+            text-decoration: none;
+            color: #1a1a1a;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        body.dark-mode .nav-center a {
+            color: #ffffff;
+        }
+
+        .nav-center a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #1a1a1a;
+            transition: width 0.3s ease;
+        }
+
+        body.dark-mode .nav-center a::after {
+            background-color: #ffffff;
+        }
+
+        .nav-center a:hover::after {
+            width: 100%;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .discord-btn {
+            padding: 0.8rem 1.8rem;
+            background: #1a1a1a;
+            color: #ffffff !important;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .discord-btn {
+            background: #ffffff;
+            color: #1a1a1a !important;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .discord-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .theme-toggle {
+            background: rgba(0, 0, 0, 0.1);
+            border: 2px solid #1a1a1a;
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #1a1a1a;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-mode .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 40vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('header.png') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 80px;
+        }
+
+        .hero-content {
+            text-align: center;
+            color: #ffffff;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+            font-weight: 800;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Wave Divider */
+        .wave-divider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .wave-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+
+        .light-mode .wave-divider .wave-fill {
+            fill: #ffffff;
+        }
+
+        .dark-mode .wave-divider .wave-fill {
+            fill: #1a1a1a;
+        }
+
+        /* Content Section */
+        .content-section {
+            padding: 5rem 2rem;
+            background-color: #ffffff;
+        }
+
+        body.dark-mode .content-section {
+            background-color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .content-section h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            font-weight: 800;
+        }
+
+        .content-section h3 {
+            font-size: 1.8rem;
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #1a1a1a;
+        }
+
+        body.dark-mode .content-section h3 {
+            border-bottom-color: #ffffff;
+        }
+
+        .content-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .content-section ul {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .content-section li {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            margin-bottom: 1.2rem;
+            padding-left: 2rem;
+            position: relative;
+        }
+
+        .content-section li::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: #1a1a1a;
+            font-weight: bold;
+            font-size: 1.3rem;
+        }
+
+        body.dark-mode .content-section li::before {
+            color: #ffffff;
+        }
+
+        .content-section b {
+            font-weight: 700;
+        }
+
+        .last-update {
+            margin-top: 4rem;
+            padding-top: 2rem;
+            border-top: 2px solid rgba(0, 0, 0, 0.1);
+            font-weight: 600;
+        }
+
+        body.dark-mode .last-update {
+            border-top-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        body.light-mode footer {
+            background: #2a2a2a;
+        }
+
+        footer p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            margin: 0 1.5rem;
+            font-size: 2rem;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            color: #cccccc;
+        }
+
+        body.dark-mode .social-links a:hover {
+            color: #666666;
+        }
+
+        .footer-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-links a:hover,
+        .footer-links a.active {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .content-section h2 {
+                font-size: 2.2rem;
+            }
+
+            .content-section h3 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header>
+        <img src="logo.png" alt="Vintara Logistics" class="logo">
+        <nav class="nav-center">
+            <a href="index.html">Inicio</a>
+            <a href="/descargables">Descargables</a>
+            <a href="/eventos">Eventos</a>
+        </nav>
+        <div class="nav-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+            </button>
+            <a href="https://discord.gg/UY42pmqvnw" target="_blank" class="discord-btn">¡Únete a nuestro discord!</a>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Términos de Servicio</h1>
+        </div>
+    </section>
+
+    <div class="wave-divider">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="wave-fill"></path>
+        </svg>
+    </div>
+
+    <section class="content-section">
+        <div class="container">
+            <h2>Términos de Servicio</h2>
+            <p>
+                Bienvenido a Vintara VTC. Al unirte o interactuar con nuestra Comunidad de Transporte Virtual (VTC), aceptas cumplir con los siguientes <b>Términos de Servicio</b>. Estos términos están diseñados para garantizar un ambiente <b>respetuoso</b>, <b>divertido</b> y <b>organizado</b> para todos nuestros miembros.
+            </p>
+
+            <h3>1. Aceptación de los Términos</h3>
+            <p>
+                Al acceder a nuestro servidor de Discord, utilizar nuestros recursos o participar en actividades de la VTC, reconoces haber leído, entendido y aceptado estos <b>Términos de Servicio</b> y nuestra Política de Privacidad. Si no estás de acuerdo con alguna parte de los términos, te rogamos que no utilices nuestros servicios.
+            </p>
+
+            <h3>2. Membresía y Requisitos</h3>
+            <ul>
+                <li>La membresía en Vintara VTC está sujeta a la aprobación de la <b>Administración</b>.</li>
+                <li>Debes cumplir con los requisitos mínimos de TruckersMP (ETS2/ATS) y las reglas específicas de la VTC (edad, actividad, etc.).</li>
+                <li>Nos reservamos el derecho de revocar la membresía de cualquier conductor que incumpla las reglas de la VTC o de TruckersMP.</li>
+            </ul>
+
+            <h3>3. Código de Conducta</h3>
+            <ul>
+                <li>Se requiere un trato <b>respetuoso</b> hacia todos los miembros de la VTC y de la comunidad de TruckersMP.</li>
+                <li>Está estrictamente prohibido el <b>acoso</b>, el <b>discurso de odio</b> o cualquier forma de discriminación.</li>
+                <li>Cualquier forma de <b>trampa</b> o comportamiento perjudicial en los servidores de TruckersMP que resulte en sanciones para la VTC puede resultar en la <b>expulsión inmediata</b>.</li>
+                <li>Las decisiones de la <b>Administración</b> son finales.</li>
+            </ul>
+
+            <h3>4. Reglas de Actividad y Conducción</h3>
+            <ul>
+                <li>Los conductores deben registrar su <b>actividad de conducción</b> (e.g., a través de nuestro tracker VTC o TruckersMP).</li>
+                <li>Durante los <b>convoyes oficiales</b>, se requiere seguir las instrucciones del líder del convoy y mantener la distancia y velocidad adecuadas.</li>
+                <li>Se espera que los conductores mantengan una <b>conducta de conducción realista</b> y responsable en los servidores multijugador.</li>
+            </ul>
+
+            <h3>5. Limitación de Responsabilidad</h3>
+            <p>
+                Vintara VTC <b>no se hace responsable</b> por cualquier sanción o baneo que un conductor reciba en TruckersMP o Discord como resultado de sus propias acciones. La responsabilidad de cumplir con las reglas del juego y de los mods recae únicamente en el <b>conductor</b>.
+            </p>
+            
+            <h3>6. Modificaciones de los Términos</h3>
+            <p>
+                Nos reservamos el derecho de <b>modificar</b> o reemplazar estos Términos de Servicio en cualquier momento. La fecha de la última actualización se indicará al inicio del documento. Es responsabilidad del usuario <b>revisar estos términos</b> periódicamente. La continuación del uso de la VTC después de dichas modificaciones constituye la aceptación de los nuevos términos.
+            </p>
+
+            <p class="last-update"><b>Última Actualización:</b> Diciembre 07, 2025</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2025 Vintara VTC.</p>
+        <div class="social-links">
+            <a href="https://www.tiktok.com/@chapulinesvtc" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://discord.gg/UY42pmqvnw" target="_blank"><i class="fab fa-discord"></i></a>
+            <a href="https://www.youtube.com/@chapulinesvtc" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="/terminos" class="active">Términos de servicio</a>
+            <a href="/politicas">Política de privacidad</a>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+    </script>
+</body>
+</html>

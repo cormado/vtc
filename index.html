@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintara Logistics - VTC</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="logo.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.3s ease, color 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        body.light-mode {
+            background-color: #f8f9fa;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode {
+            background-color: #0a0a0a;
+            color: #ffffff;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 1.2rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background-color: transparent;
+        }
+
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+        }
+
+        body.dark-mode header.scrolled {
+            background-color: rgba(15, 15, 15, 0.98);
+            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            height: 60px;
+            transition: height 0.3s ease;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        }
+
+        header.scrolled .logo {
+            height: 45px;
+        }
+
+        .nav-center {
+            display: flex;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-center a {
+            text-decoration: none;
+            color: #ffffff;
+            font-weight: 600;
+            font-size: 1.05rem;
+            transition: all 0.3s ease;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .nav-center a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ffffff;
+            transition: width 0.3s ease;
+        }
+
+        header.scrolled .nav-center a::after {
+            background-color: #1a1a1a;
+        }
+
+        body.dark-mode header.scrolled .nav-center a::after {
+            background-color: #ffffff;
+        }
+
+        .nav-center a:hover::after {
+            width: 100%;
+        }
+
+        header.scrolled .nav-center a {
+            color: #1a1a1a;
+            text-shadow: none;
+        }
+
+        body.dark-mode header.scrolled .nav-center a {
+            color: #ffffff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .discord-btn {
+            padding: 0.8rem 1.8rem;
+            background: #1a1a1a;
+            color: #ffffff !important;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            text-shadow: none !important;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .discord-btn {
+            background: #ffffff;
+            color: #1a1a1a !important;
+            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+        }
+
+        .discord-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .discord-btn:hover {
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
+        }
+
+        .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 1.3rem;
+            cursor: pointer;
+            color: #ffffff;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        header.scrolled .theme-toggle {
+            background: rgba(0, 0, 0, 0.1);
+            border-color: #1a1a1a;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode header.scrolled .theme-toggle {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: #ffffff;
+            color: #ffffff;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg) scale(1.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('header.png') center/cover no-repeat;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transition: height 0.5s ease;
+        }
+
+        .hero.shrink {
+            height: 50vh;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            color: #ffffff;
+            animation: fadeInUp 1.2s ease;
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
+            font-weight: 800;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+            opacity: 0;
+            animation: fadeInUp 1.2s ease 0.3s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Wave Divider */
+        .wave-divider {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            line-height: 0;
+        }
+
+        .wave-divider svg {
+            position: relative;
+            display: block;
+            width: calc(100% + 1.3px);
+            height: 80px;
+        }
+
+        .light-mode .wave-divider .wave-fill {
+            fill: #ffffff;
+        }
+
+        .dark-mode .wave-divider .wave-fill {
+            fill: #1a1a1a;
+        }
+
+        .light-mode .wave-divider-alt .wave-fill {
+            fill: #f8f9fa;
+        }
+
+        .dark-mode .wave-divider-alt .wave-fill {
+            fill: #0a0a0a;
+        }
+
+        /* Main Content */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        section {
+            padding: 6rem 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* About Section */
+        .about-section {
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        body.dark-mode .about-section {
+            background-color: #1a1a1a;
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .about-image {
+            width: 100%;
+            transform: translateX(-30px);
+            transition: transform 0.5s ease;
+        }
+
+        .about-section.visible .about-image {
+            transform: translateX(0);
+        }
+
+        .about-content h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .about-content h2 {
+            color: #ffffff;
+        }
+
+        .about-content p {
+            line-height: 1.9;
+            font-size: 1.15rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        .about-content h3 {
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+            color: #333333;
+        }
+
+        body.dark-mode .about-content h3 {
+            color: #cccccc;
+        }
+
+        /* Gallery Section */
+        .gallery-section {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            position: relative;
+        }
+
+        body.light-mode .gallery-section {
+            background-color: #e8e8e8;
+            color: #1a1a1a;
+        }
+
+        .gallery-section h2 {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        body.light-mode .gallery-section h2 {
+            color: #1a1a1a;
+        }
+
+        .gallery {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-slide {
+            display: none;
+            position: relative;
+        }
+
+        .gallery-slide.active {
+            display: block;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .gallery-slide img {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        .gallery-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.9));
+            color: #ffffff;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        .gallery-arrows {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            padding: 0 1.5rem;
+        }
+
+        .arrow {
+            background: rgba(0, 0, 0, 0.7);
+            color: #ffffff;
+            border: none;
+            font-size: 2rem;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body.light-mode .arrow {
+            background: rgba(255, 255, 255, 0.7);
+            color: #1a1a1a;
+        }
+
+        .arrow:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        body.light-mode .arrow:hover {
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Join Section */
+        .join-section {
+            background-color: #ffffff;
+            position: relative;
+        }
+
+        body.dark-mode .join-section {
+            background-color: #1a1a1a;
+        }
+
+        .join-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .join-image {
+            width: 100%;
+            transform: translateX(30px);
+            transition: transform 0.5s ease;
+        }
+
+        .join-section.visible .join-image {
+            transform: translateX(0);
+        }
+
+        .join-content {
+            padding: 2rem;
+        }
+
+        .join-content h2 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            color: #1a1a1a;
+        }
+
+        body.dark-mode .join-content h2 {
+            color: #ffffff;
+        }
+
+        .join-content p {
+            font-size: 1.15rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+
+        .requirements {
+            list-style: none;
+            margin: 2rem 0;
+        }
+
+        .requirements li {
+            margin-bottom: 1.2rem;
+            padding-left: 2rem;
+            position: relative;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .requirements li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #1a1a1a;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        body.dark-mode .requirements li::before {
+            color: #ffffff;
+        }
+
+        .apply-btn {
+            margin-top: 2rem;
+            padding: 1.2rem 3rem;
+            background: #1a1a1a;
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        body.dark-mode .apply-btn {
+            background: #ffffff;
+            color: #1a1a1a;
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .apply-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-mode .apply-btn:hover {
+            box-shadow: 0 15px 40px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 2rem 2rem;
+            text-align: center;
+            background: #1a1a1a;
+            color: #ffffff;
+        }
+
+        body.light-mode footer {
+            background: #2a2a2a;
+        }
+
+        footer p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .social-links {
+            margin: 2rem 0;
+        }
+
+        .social-links a {
+            margin: 0 1.5rem;
+            font-size: 2rem;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .social-links a:hover {
+            transform: translateY(-5px);
+            color: #cccccc;
+        }
+
+        body.dark-mode .social-links a:hover {
+            color: #666666;
+        }
+
+        .footer-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .footer-links a {
+            margin: 0 1.5rem;
+            text-decoration: none;
+            color: #ffffff;
+            transition: opacity 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-links a:hover {
+            opacity: 0.7;
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .about-grid, .join-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-image, .join-image {
+                transform: translateX(0) !important;
+            }
+
+            .nav-center {
+                display: none;
+            }
+
+            .gallery-slide img {
+                height: 400px;
+            }
+
+            h2 {
+                font-size: 2.2rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <header id="header">
+        <img src="alternative.png" alt="Vintara Logistics" class="logo">
+        <nav class="nav-center">
+            <a href="/">Inicio</a>
+            <a href="/descargables">Descargables</a>
+            <a href="https://truckersmp.com/vtc/81636/events">Eventos</a>
+        </nav>
+        <div class="nav-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-sun"></i>
+            </button>
+            <a href="https://discord.gg/UY42pmqvnw" target="_blank" class="discord-btn">¡Únete a nuestro discord!</a>
+        </div>
+    </header>
+
+    <section class="hero" id="hero">
+        <div class="hero-content">
+            <h1>Vintara Logistics</h1>
+            <p>Tu familia en las carreteras virtuales</p>
+        </div>
+    </section>
+
+    <div class="wave-divider">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="wave-fill"></path>
+        </svg>
+    </div>
+
+    <div class="container">
+        <section class="about-section" id="about">
+            <div class="about-grid">
+                <img src="truck-about.png" alt="Camión Vintara" class="about-image">
+                <div class="about-content">
+                    <h2>¿Quiénes Somos?</h2>
+                    <p>En Vintara Logistics, no solo somos una VTC, somos realmente un grupo de amigos que les encanta convivir y conducir en compañía.</p>
+                    
+                    <h3>Nuestra Visión</h3>
+                    <p>Nuestra visión es clara: queremos ser la comunidad hispana de truckers más grande y unida. Un lugar donde todos sientan el sentido de pertenencia, se la pase increíble y viva cada ruta como una experiencia. Queremos que Chapulines sea una de las mejores comunidades de ETS2 y ATS.</p>
+                    
+                    <h3>Nuestra Meta</h3>
+                    <p>Lo que buscamos es ofrecerles la mejor experiencia posible a nuestros conductores en ETS2/ATS. Queremos un ambiente fuera de toxicidad, donde nos apoyemos, nos divirtamos y hasta le echemos ganas a la competencia sana. La idea es que todos crezcamos como truckers y, lo más importante, como una gran familia. Queremos que cada ruta con Chapulines se quede grabada como un recuerdo épico.</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div class="wave-divider">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M985.66,92.83C906.67,72,823.78,31,743.84,14.19c-82.26-17.34-168.06-16.33-250.45.39-57.84,11.73-114,31.07-172,41.86A600.21,600.21,0,0,1,0,27.35V120H1200V95.8C1132.19,118.92,1055.71,111.31,985.66,92.83Z" class="wave-fill"></path>
+        </svg>
+    </div>
+
+    <section class="gallery-section" id="gallery">
+        <h2>Galería</h2>
+        <div class="gallery">
+            <div class="gallery-slide active">
+                <img src="gallery1.jpg" alt="Galería 1">
+                <div class="gallery-caption">Presentacion de pintura</div>
+            </div>
+            <div class="gallery-slide">
+                <img src="gallery2.jpg" alt="Galería 2">
+                <div class="gallery-caption">Convoy Nocturno</div>
+            </div>
+            <div class="gallery-slide">
+                <img src="gallery3.jpg" alt="Galería 3">
+                <div class="gallery-caption">Equipo Unido</div>
+            </div>
+            <div class="gallery-slide">
+                <img src="gallery4.jpg" alt="Galería 4">
+                <div class="gallery-caption">Aventuras en Carretera</div>
+            </div>
+            <div class="gallery-slide">
+                <img src="gallery5.jpg" alt="Galería 5">
+                <div class="gallery-caption">Familia Chapulines</div>
+            </div>
+            <div class="gallery-slide">
+                <img src="gallery6.jpg" alt="Galería 6">
+                <div class="gallery-caption">Destinos Increíbles</div>
+            </div>
+            <div class="gallery-arrows">
+                <button class="arrow" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
+                <button class="arrow" id="nextBtn"><i class="fas fa-chevron-right"></i></button>
+            </div>
+        </div>
+    </section>
+
+    <div class="wave-divider wave-divider-alt">
+        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
+            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="wave-fill"></path>
+        </svg>
+    </div>
+
+    <div class="container">
+        <section class="join-section" id="join">
+            <div class="join-grid">
+                <div class="join-content">
+                    <h2>¡Súbete al Camión!</h2>
+                    <p>¿Listo para unirte a la familia? Asegúrate de cumplir con estos sencillos requisitos para empezar a dominar las carreteras con nosotros.</p>
+                    <ul class="requirements">
+                        <li>Tener una copia legal de Euro Truck Simulator 2 y/o de American Truck Simulator.</li>
+                        <li>Necesitas tener una cuenta y el cliente descargado de TruckersMP.</li>
+                        <li>Tener una cuenta de discord</li>
+                        <li>No tener cuenta sospechosa en discord o más de 3 baneos activos en TruckersMP.</li>
+                    </ul>
+                    <button class="apply-btn" onclick="window.open('https://discord.gg/UY42pmqvnw', '_blank')">Aplica ahora</button>
+                </div>
+                <img src="truck-join.png" alt="Únete a Vintara" class="join-image">
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>© 2025 Vintara VTC.</p>
+        <div class="social-links">
+            <a href="https://www.tiktok.com/@chapulinesvtc" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://discord.gg/UY42pmqvnw" target="_blank"><i class="fab fa-discord"></i></a>
+            <a href="https://www.youtube.com/@chapulinesvtc" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="footer-links">
+            <a href="/terminos">Términos de servicio</a>
+            <a href="/privacidad">Política de privacidad</a>
+        </div>
+    </footer>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('light-mode');
+            body.classList.toggle('dark-mode');
+            
+            if (body.classList.contains('dark-mode')) {
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        });
+
+        // Header Scroll Effect
+        const header = document.getElementById('header');
+        const hero = document.getElementById('hero');
+
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                header.classList.add('scrolled');
+                hero.classList.add('shrink');
+            } else {
+                header.classList.remove('scrolled');
+                hero.classList.remove('shrink');
+            }
+        });
+
+        // Section Visibility Animation
+        const sections = document.querySelectorAll('section');
+        
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Gallery
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.gallery-slide');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        prevBtn.addEventListener('click', () => showSlide(currentSlide - 1));
+        nextBtn.addEventListener('click', () => showSlide(currentSlide + 1));
+
+        // Auto-advance gallery
+        setInterval(() => {
+            showSlide(currentSlide + 1);
+        }, 5000);
+    </script>
+</body>
+</html>

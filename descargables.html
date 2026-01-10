@@ -5,500 +5,407 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Descargables - Vintara Logistics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;1,800&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="icon" type="image/png" href="logo.png">
+    
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-purple: #8A2BE2;
+            --accent-red: #dd00ff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --border-light: rgba(255, 255, 255, 0.1);
         }
+
+        /* Reset y Base */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            transition: background-color 0.3s ease, color 0.3s ease;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
             overflow-x: hidden;
+            overflow-y: hidden;
         }
 
-        body.light-mode {
-            background-color: #f8f9fa;
-            color: #1a1a1a;
+        body.loaded { overflow-y: auto; }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
         }
 
-        body.dark-mode {
-            background-color: #0a0a0a;
-            color: #ffffff;
+        .loader-circle {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--accent-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
         }
 
-        /* Header */
+        .loader-text {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .hide-loader { opacity: 0; visibility: hidden; pointer-events: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* --- HEADER --- */
         header {
             position: fixed;
-            top: 0;
-            width: 100%;
-            padding: 1.2rem 5%;
+            top: 0; width: 100%;
+            padding: 1.5rem 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background-color: rgba(255, 255, 255, 0.98);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            backdrop-filter: blur(10px);
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
         }
 
-        body.dark-mode header {
-            background-color: rgba(15, 15, 15, 0.98);
-            box-shadow: 0 4px 20px rgba(255, 255, 255, 0.05);
+        header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--accent-purple);
+            padding: 1rem 5%;
         }
 
-        .logo {
-            height: 50px;
-            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+        .logo-text {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 800;
+            font-style: italic;
+            font-size: 2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: -1px;
         }
+        .logo-text span { color: var(--accent-purple); }
 
-        .nav-center {
-            display: flex;
-            gap: 2.5rem;
-            align-items: center;
-        }
-
+        .nav-center { display: flex; gap: 3rem; }
         .nav-center a {
             text-decoration: none;
-            color: #1a1a1a;
+            color: var(--text-main);
+            font-family: 'Kanit', sans-serif;
             font-weight: 600;
-            font-size: 1.05rem;
-            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-size: 1.1rem;
             position: relative;
+            transition: color 0.3s;
         }
-
-        body.dark-mode .nav-center a {
-            color: #ffffff;
-        }
-
-        .nav-center a::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: #1a1a1a;
-            transition: width 0.3s ease;
-        }
-
-        body.dark-mode .nav-center a::after {
-            background-color: #ffffff;
-        }
-
-        .nav-center a:hover::after,
+        .nav-center a:hover, .nav-center a.active { color: var(--accent-purple); }
         .nav-center a.active::after {
-            width: 100%;
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 100%; height: 2px;
+            background: var(--accent-red);
         }
 
-        .nav-right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .discord-btn {
-            padding: 0.8rem 1.8rem;
-            background: #1a1a1a;
-            color: #ffffff !important;
-            border-radius: 50px;
+        .login-btn {
+            padding: 0.6rem 2rem;
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--accent-red);
+            font-family: 'Kanit', sans-serif;
+            text-transform: uppercase;
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
             transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-        }
-
-        body.dark-mode .discord-btn {
-            background: #ffffff;
-            color: #1a1a1a !important;
-            box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
-        }
-
-        .discord-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        body.dark-mode .discord-btn:hover {
-            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.4);
-        }
-
-        .theme-toggle {
-            background: rgba(0, 0, 0, 0.1);
-            border: 2px solid #1a1a1a;
-            font-size: 1.3rem;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
             cursor: pointer;
-            color: #1a1a1a;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
+            display: inline-block;
         }
-
-        body.dark-mode .theme-toggle {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #ffffff;
-            color: #ffffff;
+        .login-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--accent-red); z-index: -1;
+            transform: translateX(-101%); transition: transform 0.3s ease;
         }
+        .login-btn:hover::before { transform: translateX(0); }
+        .login-btn:hover { box-shadow: 0 0 15px var(--accent-red); color: #fff; }
 
-        .theme-toggle:hover {
-            transform: rotate(180deg) scale(1.1);
-        }
-
-        /* Hero Section */
+        /* --- HERO --- */
         .hero {
-            height: 40vh;
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('header.png') center/cover no-repeat;
+            height: 50vh;
             display: flex;
-            justify-content: center;
             align-items: center;
-            margin-top: 80px;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(138,43,226,0.15) 0%, #0a0a0a 70%), 
+                        url('header.png') center/cover no-repeat;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
         }
 
-        .hero-content {
-            text-align: center;
-            color: #ffffff;
-            animation: fadeInUp 1s ease;
+        .hero::before {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(0deg, #0a0a0a 0%, rgba(10,10,10,0.7) 100%);
+            z-index: 1;
         }
+
+        .hero-content { position: relative; z-index: 2; text-align: center; }
 
         .hero h1 {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 900;
+            font-style: italic;
             font-size: 4rem;
-            margin-bottom: 1rem;
-            text-shadow: 3px 3px 20px rgba(0, 0, 0, 0.8);
-            font-weight: 800;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+            opacity: 0; transform: translateY(20px);
         }
-
+        .hero-animate h1 { animation: textReveal 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards; }
+        .hero h1 span { color: #fff; -webkit-text-stroke: 0; text-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
+        
         .hero p {
-            font-size: 1.3rem;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.8);
+            font-size: 1.2rem;
+            color: #ccc;
+            margin-top: 1rem;
+            opacity: 0;
         }
+        .hero-animate p { animation: fadeInUp 1s 0.5s forwards; }
 
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+        @keyframes textReveal { to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
 
-        /* Wave Divider */
-        .wave-divider {
-            position: relative;
-            width: 100%;
-            overflow: hidden;
-            line-height: 0;
-        }
-
-        .wave-divider svg {
-            position: relative;
-            display: block;
-            width: calc(100% + 1.3px);
-            height: 80px;
-        }
-
-        .light-mode .wave-divider .wave-fill {
-            fill: #ffffff;
-        }
-
-        .dark-mode .wave-divider .wave-fill {
-            fill: #1a1a1a;
-        }
-
-        /* Downloads Section */
-        .downloads-section {
-            padding: 5rem 2rem;
-            background-color: #ffffff;
-        }
-
-        body.dark-mode .downloads-section {
-            background-color: #1a1a1a;
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-        }
-
+        /* --- DOWNLOADS GRID --- */
+        .container { max-width: 1400px; margin: 0 auto; padding: 2rem; }
+        
         .section-title {
+            font-family: 'Kanit', sans-serif;
+            font-size: 2.5rem;
             text-align: center;
-            font-size: 3rem;
+            text-transform: uppercase;
             margin-bottom: 3rem;
-            font-weight: 800;
+            color: #fff;
         }
 
         .downloads-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
         }
 
         .download-card {
-            background-color: #f8f9fa;
-            border-radius: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            border-radius: 4px;
             overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s ease;
+            transition: all 0.3s ease;
             opacity: 0;
             transform: translateY(30px);
+            position: relative;
         }
-
-        body.dark-mode .download-card {
-            background-color: #0a0a0a;
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.05);
-        }
-
-        .download-card.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        
+        .download-card.visible { opacity: 1; transform: translateY(0); }
 
         .download-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            transform: translateY(-5px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 30px rgba(138, 43, 226, 0.1);
         }
 
-        body.dark-mode .download-card:hover {
-            box-shadow: 0 20px 50px rgba(255, 255, 255, 0.1);
-        }
-
-        .card-image {
+        .card-image-wrapper {
             width: 100%;
             height: 250px;
-            object-fit: contain;
-            background-color: #ffffff;
-            padding: 2rem;
-        }
-
-        body.dark-mode .card-image {
+            /* Patrón de cuadrícula suave para que resalten los PNGs */
             background-color: #1a1a1a;
-        }
-
-        .card-content {
-            padding: 2rem;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #1a1a1a;
-        }
-
-        body.dark-mode .card-title {
-            color: #ffffff;
-        }
-
-        .download-btn {
-            width: 100%;
-            padding: 1rem 2rem;
-            background: #1a1a1a;
-            color: #ffffff;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background-image: 
+                linear-gradient(45deg, #151515 25%, transparent 25%), 
+                linear-gradient(-45deg, #151515 25%, transparent 25%), 
+                linear-gradient(45deg, transparent 75%, #151515 75%), 
+                linear-gradient(-45deg, transparent 75%, #151515 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 0.5rem;
-            text-decoration: none;
+            padding: 2rem;
+            border-bottom: 1px solid var(--border-light);
         }
 
-        body.dark-mode .download-btn {
-            background: #ffffff;
-            color: #1a1a1a;
+        .card-image {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 0 10px rgba(0,0,0,0.5));
         }
 
-        .download-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
-        }
+        .card-content { padding: 1.5rem; text-align: center; }
 
-        body.dark-mode .download-btn:hover {
-            box-shadow: 0 5px 20px rgba(255, 255, 255, 0.3);
-        }
-
-        /* Footer */
-        footer {
-            padding: 4rem 2rem 2rem;
-            text-align: center;
-            background: #1a1a1a;
-            color: #ffffff;
-        }
-
-        body.light-mode footer {
-            background: #2a2a2a;
-        }
-
-        footer p {
+        .card-title {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
             margin-bottom: 1.5rem;
-            font-size: 1.1rem;
+            color: #fff;
+            text-transform: uppercase;
         }
 
-        .social-links {
-            margin: 2rem 0;
+        /* Botón estilo Cyberpunk ancho */
+        .download-action-btn {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
+        /* --- FOOTER --- */
+        footer {
+            background: #050505;
+            padding: 3rem;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: 5rem;
+        }
+
+        .social-links { margin: 2rem 0; }
         .social-links a {
-            margin: 0 1.5rem;
-            font-size: 2rem;
-            color: #ffffff;
-            transition: all 0.3s ease;
-            display: inline-block;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            margin: 0 1rem;
+            transition: all 0.3s;
         }
-
-        .social-links a:hover {
-            transform: translateY(-5px);
-            color: #cccccc;
-        }
-
-        body.dark-mode .social-links a:hover {
-            color: #666666;
-        }
+        .social-links a:hover { color: var(--accent-red); transform: translateY(-3px); }
 
         .footer-links {
             margin-top: 2rem;
             padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            border-top: 1px solid rgba(255,255,255,0.1);
         }
-
         .footer-links a {
-            margin: 0 1.5rem;
+            color: var(--text-muted);
             text-decoration: none;
-            color: #ffffff;
-            transition: opacity 0.3s ease;
-            font-weight: 500;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
         }
+        .footer-links a:hover { color: #fff; text-decoration: underline; }
 
-        .footer-links a:hover {
-            opacity: 0.7;
-        }
-
-        /* Responsive */
-        @media (max-width: 968px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-
-            .nav-center {
-                display: none;
-            }
-
-            .downloads-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .section-title {
-                font-size: 2.2rem;
-            }
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-center { display: none; }
+            .downloads-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
-<body class="light-mode">
-    <header>
-        <img src="alternative.png" alt="Vintara Logistics" class="logo">
+<body>
+
+    <div id="preloader">
+        <div class="loader-circle"></div>
+        <div class="loader-text">Espera...</div>
+    </div>
+
+    <header id="header">
+        <div class="logo-text">VINTARA<span>.</span></div>
         <nav class="nav-center">
             <a href="/">Inicio</a>
             <a href="/descargables" class="active">Descargables</a>
             <a href="https://truckersmp.com/vtc/81636/events">Eventos</a>
         </nav>
-        <div class="nav-right">
-            <button class="theme-toggle" id="themeToggle">
-                <i class="fas fa-sun"></i>
-            </button>
-            <a href="https://discord.gg/UY42pmqvnw" target="_blank" class="discord-btn">¡Únete a nuestro discord!</a>
-        </div>
+        <a href="/login" class="login-btn">Iniciar Sesión</a>
     </header>
 
-    <section class="hero">
+    <section class="hero" id="hero-section">
         <div class="hero-content">
-            <h1>Descargables</h1>
-            <p>¿Necesitas alguna ilustracion de la empresa?</p>
+            <h1>Descar<span>gables</span></h1>
+            <p>¿Necesitas alguna ilustración de la empresa?</p>
         </div>
     </section>
 
-    <div class="wave-divider">
-        <svg viewBox="0 0 1200 120" preserveAspectRatio="none">
-            <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z" class="wave-fill"></path>
-        </svg>
-    </div>
-
     <section class="downloads-section">
         <div class="container">
-            <h2 class="section-title">Recursos Disponibles para su descarga:</h2>
+            <h2 class="section-title">Recursos <span>Disponibles</span></h2>
             
             <div class="downloads-grid">
+                
                 <div class="download-card">
-                    <img src="logobg.png" alt="Logo Vintara" class="card-image">
+                    <div class="card-image-wrapper">
+                        <img src="logobg.png" alt="Logo Vintara" class="card-image">
+                    </div>
                     <div class="card-content">
                         <h3 class="card-title">Logo</h3>
-                        <a href="logo.png" download="Vintara-Logo.png" class="download-btn">
-                            <i class="fas fa-download"></i>
-                            Descargar
+                        <a href="logo.png" download="Vintara-Logo.png" class="login-btn download-action-btn">
+                            <i class="fas fa-download"></i> Descargar
                         </a>
                     </div>
                 </div>
 
                 <div class="download-card">
-                    <img src="logo.png" alt="Logo sin fondo" class="card-image">
+                    <div class="card-image-wrapper">
+                        <img src="logo.png" alt="Logo sin fondo" class="card-image">
+                    </div>
                     <div class="card-content">
                         <h3 class="card-title">Logo sin fondo</h3>
-                        <a href="logobg.png" download="Vintara-Logo-Transparente.png" class="download-btn">
-                            <i class="fas fa-download"></i>
-                            Descargar
+                        <a href="logobg.png" download="Vintara-Logo-Transparente.png" class="login-btn download-action-btn">
+                            <i class="fas fa-download"></i> Descargar
                         </a>
                     </div>
                 </div>
 
                 <div class="download-card">
-                    <img src="alternative.png" alt="Logo Alternativo" class="card-image">
+                    <div class="card-image-wrapper">
+                        <img src="alternative.png" alt="Logo Alternativo" class="card-image">
+                    </div>
                     <div class="card-content">
-                        <h3 class="card-title">Logo Alternativo</h3>
-                        <a href="alternative.png" download="Vintara-Logo-Alternativo.png" class="download-btn">
-                            <i class="fas fa-download"></i>
-                            Descargar
+                        <h3 class="card-title">Alternativo</h3>
+                        <a href="alternative.png" download="Vintara-Logo-Alternativo.png" class="login-btn download-action-btn">
+                            <i class="fas fa-download"></i> Descargar
                         </a>
                     </div>
                 </div>
 
                 <div class="download-card">
-                    <img src="fondodepantalla.png" alt="Fondo de pantalla" class="card-image">
+                    <div class="card-image-wrapper">
+                        <img src="fondodepantalla.png" alt="Fondo de pantalla" class="card-image" style="width: 100%; object-fit: cover;">
+                    </div>
                     <div class="card-content">
-                        <h3 class="card-title">Fondo de pantalla</h3>
-                        <a href="fondodepantalla.png" download="Vintara-Wallpaper.png" class="download-btn">
-                            <i class="fas fa-download"></i>
-                            Descargar
+                        <h3 class="card-title">Wallpaper</h3>
+                        <a href="fondodepantalla.png" download="Vintara-Wallpaper.png" class="login-btn download-action-btn">
+                            <i class="fas fa-download"></i> Descargar
                         </a>
                     </div>
                 </div>
 
                 <div class="download-card">
-                    <img src="banner.png" alt="Banner" class="card-image">
+                    <div class="card-image-wrapper">
+                        <img src="banner.png" alt="Banner" class="card-image" style="width: 100%; object-fit: cover;">
+                    </div>
                     <div class="card-content">
                         <h3 class="card-title">Banner</h3>
-                        <a href="banner.png" download="Vintara-Banner.png" class="download-btn">
-                            <i class="fas fa-download"></i>
-                            Descargar
+                        <a href="banner.png" download="Vintara-Banner.png" class="login-btn download-action-btn">
+                            <i class="fas fa-download"></i> Descargar
                         </a>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
     <footer>
-        <p>© 2025 Vintara VTC.</p>
+        <p style="opacity: 0.5;">© 2026 Vintara Logistics. Design by Vintara Studio.</p>
         <div class="social-links">
             <a href="https://www.tiktok.com/@chapulinesvtc" target="_blank"><i class="fab fa-tiktok"></i></a>
             <a href="https://discord.gg/UY42pmqvnw" target="_blank"><i class="fab fa-discord"></i></a>
@@ -506,50 +413,46 @@
         </div>
         <div class="footer-links">
             <a href="/terminos">Términos de servicio</a>
-            <a href="/privacidad">Política de privacidad</a>
+            <a href="/politicas">Política de privacidad</a>
         </div>
     </footer>
 
     <script>
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        const icon = themeToggle.querySelector('i');
+        // --- 1. PRELOADER & HERO ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const heroSection = document.getElementById('hero-section');
+            const body = document.body;
 
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('light-mode');
-            body.classList.toggle('dark-mode');
-            
-            if (body.classList.contains('dark-mode')) {
-                icon.classList.remove('fa-sun');
-                icon.classList.add('fa-moon');
-            } else {
-                icon.classList.remove('fa-moon');
-                icon.classList.add('fa-sun');
-            }
+            setTimeout(() => {
+                preloader.classList.add('hide-loader');
+                body.classList.add('loaded');
+                heroSection.classList.add('hero-animate');
+            }, 500);
         });
 
-        // Card Visibility Animation
-        const cards = document.querySelectorAll('.download-card');
-        
-        const observerOptions = {
-            threshold: 0.15,
-            rootMargin: '0px 0px -50px 0px'
-        };
+        // --- 2. HEADER SCROLL ---
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
 
+        // --- 3. CARD ANIMATION ---
+        const cards = document.querySelectorAll('.download-card');
         const observer = new IntersectionObserver((entries) => {
             entries.forEach((entry, index) => {
                 if (entry.isIntersecting) {
+                    // Staggered animation (efecto cascada)
                     setTimeout(() => {
                         entry.target.classList.add('visible');
-                    }, index * 100);
+                    }, index * 100); // 100ms de retraso por tarjeta
+                    observer.unobserve(entry.target); // Solo animar una vez
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        cards.forEach(card => {
-            observer.observe(card);
-        });
+        cards.forEach(card => observer.observe(card));
     </script>
 </body>
 </html>

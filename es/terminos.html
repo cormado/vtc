@@ -3,11 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Política de Privacidad - Vintara Logistics</title>
+    <title>Términos de Servicio - Vintara Logistics</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;1,800&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="../logo.png">
     
+    <script>
+        // --- REDIRECCIÓN ESPECÍFICA (terminos -> terms) ---
+        
+        function irAIngles() {
+            window.location.href = '/terms.html';
+        }
+
+        if (localStorage.getItem('userLang') === 'es') {
+            // Se queda aquí
+        } else if (localStorage.getItem('userLang') === 'en') {
+            irAIngles();
+        } else {
+            const paisesHispanos = ['AR', 'BO', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'SV', 'GT', 'HN', 'MX', 'NI', 'PA', 'PY', 'PE', 'PR', 'UY', 'VE'];
+            
+            fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                if (!paisesHispanos.includes(data.country_code)) {
+                    irAIngles();
+                }
+            })
+            .catch(err => {
+                const navLang = navigator.language || navigator.userLanguage;
+                if (!navLang.startsWith('es')) {
+                    irAIngles();
+                }
+            });
+        }
+
+        function cambiarIdiomaManual(lang) {
+            localStorage.setItem('userLang', lang);
+        }
+    </script>
+
     <style>
         :root {
             --bg-primary: #0a0a0a;
@@ -15,11 +49,10 @@
             --text-main: #ffffff;
             --text-muted: #a0a0a0;
             --accent-purple: #8A2BE2;
-            --accent-red: #dd00ff; /* Tu color personalizado */
+            --accent-red: #dd00ff;
             --glass-bg: rgba(255, 255, 255, 0.05);
         }
 
-        /* Reset y Base */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -27,12 +60,10 @@
             background-color: var(--bg-primary);
             color: var(--text-main);
             overflow-x: hidden;
-            overflow-y: hidden; /* Ocultar scroll durante carga */
+            overflow-y: hidden; 
         }
 
-        body.loaded {
-            overflow-y: auto;
-        }
+        body.loaded { overflow-y: auto; }
 
         /* --- PRELOADER --- */
         #preloader {
@@ -113,6 +144,8 @@
         }
         .nav-center a:hover { color: var(--accent-purple); }
 
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+
         .login-btn {
             padding: 0.6rem 2rem;
             background: transparent;
@@ -126,6 +159,8 @@
             overflow: hidden;
             transition: all 0.3s ease;
             clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            cursor: pointer;
+            display: inline-block;
         }
         .login-btn::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
@@ -135,14 +170,30 @@
         .login-btn:hover::before { transform: translateX(0); }
         .login-btn:hover { box-shadow: 0 0 15px var(--accent-red); }
 
-        /* --- HERO (Subpage Style) --- */
+        .lang-switch {
+            color: var(--text-muted);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.4rem 0.8rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .lang-switch:hover { border-color: var(--accent-purple); color: #fff; }
+
+        /* --- HERO --- */
         .hero {
             height: 50vh;
             display: flex;
             align-items: center;
             justify-content: center;
+            /* Ruta corregida: ../header.png */
             background: radial-gradient(circle at center, rgba(138,43,226,0.15) 0%, #0a0a0a 70%), 
-                        url('header.png') center/cover no-repeat;
+                        url('../header.png') center/cover no-repeat;
             position: relative;
             overflow: hidden;
             margin-bottom: 2rem;
@@ -154,11 +205,7 @@
             z-index: 1;
         }
 
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            text-align: center;
-        }
+        .hero-content { position: relative; z-index: 2; text-align: center; }
 
         .hero h1 {
             font-family: 'Kanit', sans-serif;
@@ -168,25 +215,14 @@
             text-transform: uppercase;
             color: transparent;
             -webkit-text-stroke: 1px #fff;
-            opacity: 0; 
-            transform: translateY(20px);
+            opacity: 0; transform: translateY(20px);
         }
 
-        .hero-animate h1 {
-            animation: textReveal 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards;
-        }
-        
-        .hero h1 span {
-            color: #fff;
-            -webkit-text-stroke: 0;
-            text-shadow: 0 0 20px rgba(138, 43, 226, 0.5);
-        }
+        .hero-animate h1 { animation: textReveal 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards; }
+        .hero h1 span { color: #fff; -webkit-text-stroke: 0; text-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
+        @keyframes textReveal { to { opacity: 1; transform: translateY(0); } }
 
-        @keyframes textReveal {
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* --- CONTENT SECTION (Glassmorphism) --- */
+        /* --- CONTENT --- */
         .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
 
         .glass-card {
@@ -201,7 +237,6 @@
         }
         .glass-card.visible { opacity: 1; transform: translateY(0); }
 
-        /* Decoración esquina tarjeta */
         .glass-card::after {
             content: ''; position: absolute; top: -1px; right: -1px;
             width: 30px; height: 30px;
@@ -247,7 +282,7 @@
             color: #ddd;
         }
         ul li::before {
-            content: '\f054'; /* FontAwesome chevron */
+            content: '\f054';
             font-family: 'Font Awesome 6 Free';
             font-weight: 900;
             position: absolute;
@@ -267,7 +302,6 @@
             color: var(--text-muted);
         }
 
-        /* --- FOOTER --- */
         footer {
             background: #050505;
             padding: 3rem;
@@ -318,65 +352,66 @@
     <header id="header">
         <div class="logo-text">VINTARA<span>.</span></div>
         <nav class="nav-center">
-            <a href="/">Inicio</a>
-            <a href="/descargables">Descargables</a>
-            <a href="/eventos">Eventos</a>
+            <a href="/es/">Inicio</a>
+            <a href="/es/descargables.html">Descargables</a>
+            <a href="https://truckersmp.com/vtc/81636/events">Eventos</a>
         </nav>
-        <a href="/login" class="login-btn">Iniciar Sesión</a>
+        
+        <div class="header-actions">
+            <a href="/terms.html" class="lang-switch" onclick="cambiarIdiomaManual('en')">
+                <i class="fas fa-globe"></i> EN
+            </a>
+            <a href="https://driverhub.vintara.xyz" class="login-btn">Iniciar Sesión</a>
+        </div>
     </header>
 
     <section class="hero" id="hero-section">
         <div class="hero-content">
-            <h1>Política de <span>Privacidad</span></h1>
+            <h1>Términos de <span>Servicio</span></h1>
         </div>
     </section>
 
     <div class="container">
         <div class="glass-card reveal-on-scroll">
-            <h2>Política de Privacidad</h2>
+            <h2>Términos de Servicio</h2>
             <p>
-                La privacidad de nuestros miembros es importante para Vintara VTC. Esta política explica qué información recopilamos y cómo la utilizamos en el contexto de nuestra Comunidad de Transporte Virtual (VTC).
+                Bienvenido a Vintara VTC. Al unirte o interactuar con nuestra Comunidad de Transporte Virtual (VTC), aceptas cumplir con los siguientes <b>Términos de Servicio</b>. Estos términos están diseñados para garantizar un ambiente <b>respetuoso</b>, <b>divertido</b> y <b>organizado</b> para todos nuestros miembros.
             </p>
 
-            <h3>1. Información Recopilada</h3>
-            <p>Recopilamos la siguiente información necesaria para la operación y gestión de la VTC:</p>
+            <h3>1. Aceptación de los Términos</h3>
+            <p>
+                Al acceder a nuestro servidor de Discord, utilizar nuestros recursos o participar en actividades de la VTC, reconoces haber leído, entendido y aceptado estos <b>Términos de Servicio</b> y nuestra Política de Privacidad. Si no estás de acuerdo con alguna parte de los términos, te rogamos que no utilices nuestros servicios.
+            </p>
+
+            <h3>2. Membresía y Requisitos</h3>
             <ul>
-                <li><b>Información de Identificación en Plataformas:</b> Nombres de usuario y IDs de las plataformas utilizadas para la VTC, principalmente <b>Discord</b> y <b>TruckersMP</b>.</li>
-                <li><b>Datos de Actividad:</b> Horas de conducción, kilómetros recorridos y participación en convoyes, recopilados a través de herramientas de seguimiento de VTC (si las utiliza) o la API de TruckersMP.</li>
-                <li><b>Información del Proceso de Reclutamiento:</b> Respuestas proporcionadas durante la solicitud de ingreso a la VTC (edad, región, etc.).</li>
+                <li>La membresía en Vintara VTC está sujeta a la aprobación de la <b>Administración</b>.</li>
+                <li>Debes cumplir con los requisitos mínimos de TruckersMP (ETS2/ATS) y las reglas específicas de la VTC.</li>
+                <li>Nos reservamos el derecho de revocar la membresía de cualquier conductor que incumpla las reglas de la VTC o de TruckersMP.</li>
             </ul>
 
-            <h3>2. Uso de la Información</h3>
-            <p>La información recopilada se utiliza exclusivamente para los siguientes propósitos:</p>
+            <h3>3. Código de Conducta</h3>
             <ul>
-                <li><b>Gestión de Membresía:</b> Verificar la identidad y la actividad de los miembros.</li>
-                <li><b>Comunicación:</b> Enviar notificaciones sobre eventos, convoyes o actualizaciones de reglas a través de Discord.</li>
-                <li><b>Mejora de la VTC:</b> Analizar tendencias de actividad para mejorar la experiencia de la comunidad.</li>
-                <li><b>Manejo de imagenes:</b> Todas las fotos que envies en nuestro servidor de discord, podremos usarlas para nuestros medios o pagina web</li>
+                <li>Se requiere un trato <b>respetuoso</b> hacia todos los miembros de la VTC y de la comunidad de TruckersMP.</li>
+                <li>Está estrictamente prohibido el <b>acoso</b>, el <b>discurso de odio</b> o cualquier forma de discriminación.</li>
+                <li>Cualquier forma de <b>trampa</b> o comportamiento perjudicial en los servidores de TruckersMP que resulte en sanciones para la VTC puede resultar en la <b>expulsión inmediata</b>.</li>
+                <li>Las decisiones de la <b>Administración</b> son finales.</li>
             </ul>
 
-            <h3>3. Compartir Información con Terceros</h3>
-            <p>
-                Vintara VTC <b>no comparte</b> información personal identificable (como nombres de usuario o datos privados de Discord) con terceros fuera de la administración de la VTC, <b>excepto</b>:
-            </p>
+            <h3>4. Reglas de Actividad y Conducción</h3>
             <ul>
-                <li>Cuando sea requerido por la ley o las normas de las plataformas (Discord, TruckersMP).</li>
-                <li>Los datos de actividad pública (kilómetros, rangos) pueden ser visibles en nuestro sitio web o en el perfil de TruckersMP de la VTC.</li>
+                <li>Durante los <b>convoyes oficiales</b>, se requiere seguir las instrucciones del líder del convoy y mantener la distancia y velocidad adecuadas.</li>
+                <li>Se espera que los conductores mantengan una <b>conducta de conducción realista</b> durante los convoys indicados</li>
             </ul>
 
-            <h3>4. Seguridad de los Datos</h3>
+            <h3>5. Limitación de Responsabilidad</h3>
             <p>
-                Implementamos medidas de seguridad razonables para proteger la información contra el acceso no autorizado. Sin embargo, recuerda que ningún método de transmisión por Internet o almacenamiento electrónico es 100% seguro.
+                Vintara VTC <b>no se hace responsable</b> por cualquier sanción o baneo que un conductor reciba en TruckersMP o Discord como resultado de sus propias acciones. La responsabilidad de cumplir con las reglas del juego y de los mods recae únicamente en el <b>conductor</b>.
             </p>
-
-            <h3>5. Derechos del Usuario</h3>
+            
+            <h3>6. Modificaciones de los Términos</h3>
             <p>
-                Si eres miembro, tienes derecho a solicitar la información que tenemos sobre ti. Si decides abandonar la VTC, la mayoría de tus datos relacionados con la actividad de la VTC se eliminarán de nuestros registros internos, aunque tu historial en plataformas públicas (TruckersMP) puede permanecer sujeto a sus propias políticas.
-            </p>
-
-            <h3>6. Contacto</h3>
-            <p>
-                Si tienes preguntas o inquietudes sobre esta Política de Privacidad, por favor contacta a un <b>Administrador</b> o <b>Propietario</b> de Vintara VTC a través de nuestro servidor de Discord.
+                Nos reservamos el derecho de <b>modificar</b> o reemplazar estos Términos de Servicio en cualquier momento. La fecha de la última actualización se indicará al inicio del documento. Es responsabilidad del usuario <b>revisar estos términos</b> periódicamente. La continuación del uso de la VTC después de dichas modificaciones constituye la aceptación de los nuevos términos.
             </p>
 
             <p class="last-update"><b>Última Actualización:</b> Diciembre 07, 2025</p>
@@ -393,8 +428,8 @@
         </div>
 
         <div class="footer-links">
-            <a href="/terminos">Términos de servicio</a>
-            <a href="/politicas" class="active">Política de privacidad</a>
+            <a href="/es/terminos.html" class="active">Términos de servicio</a>
+            <a href="/es/privacidad.html">Política de privacidad</a>
         </div>
     </footer>
 

@@ -1,54 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vintara Logistics - VTC</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;1,800&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="../logo.png">
     
     <script>
-        // --- LÓGICA DE DETECCIÓN INTELIGENTE ---
-        
-        // 1. Verificar si el usuario ya eligió idioma manualmente
-        // Si ya eligió 'en' (inglés), no hacemos nada y dejamos de cargar el script.
-        if (localStorage.getItem('userLang') === 'en') {
-            // El usuario quiere estar aquí, no redireccionamos.
+        // --- LÓGICA DE DETECCIÓN (VERSIÓN ESPAÑOL) ---
+
+        // 1. Verificar preferencia manual
+        if (localStorage.getItem('userLang') === 'es') {
+            // El usuario quiere español explícitamente, nos quedamos aquí.
         } 
-        // Si eligió 'es', lo mandamos directo sin preguntar IP.
-        else if (localStorage.getItem('userLang') === 'es') {
-            window.location.href = '/es' + window.location.pathname;
+        else if (localStorage.getItem('userLang') === 'en') {
+            // El usuario prefiere inglés, lo mandamos a la raíz
+            window.location.href = '/';
         } 
         else {
-            // 2. Si es la primera vez (no hay preferencia guardada), detectamos.
-            
+            // 2. Auto-detección
             const paisesHispanos = ['AR', 'BO', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'SV', 'GT', 'HN', 'MX', 'NI', 'PA', 'PY', 'PE', 'PR', 'UY', 'VE'];
 
-            // OPCIÓN A: Detección por IP (Prioridad)
             fetch('https://ipapi.co/json/')
             .then(res => res.json())
             .then(data => {
                 const esHispano = paisesHispanos.includes(data.country_code);
                 
-                // Si es latino, mandar a español
-                if (esHispano) {
-                    window.location.href = '/es' + window.location.pathname;
+                // Si NO es hispano (es Gringo, Europeo, Brasileño, etc), lo mandamos al Inglés
+                if (!esHispano) {
+                    window.location.href = '/';
                 }
-                // Si NO es latino (USA, Brasil, Europa), se queda aquí en Inglés.
             })
             .catch(err => {
-                console.log("Error API IP, usando respaldo de navegador...");
-                
-                // OPCIÓN B: Respaldo por Navegador (Si falla la API)
+                // Fallback Navegador
                 const idiomaNav = navigator.language || navigator.userLanguage;
-                if (idiomaNav.startsWith('es')) {
-                    window.location.href = '/es' + window.location.pathname;
+                // Si su navegador NO empieza con 'es', mandarlo al inglés
+                if (!idiomaNav.startsWith('es')) {
+                    window.location.href = '/';
                 }
             });
         }
 
-        // Función para el botón manual (Guarda la preferencia)
         function cambiarIdiomaManual(lang) {
             localStorage.setItem('userLang', lang);
         }
@@ -166,7 +160,6 @@
         }
         .nav-center a:hover { color: var(--accent-purple); }
 
-        /* Contenedor de botones derechos */
         .header-actions {
             display: flex;
             align-items: center;
@@ -227,8 +220,9 @@
             align-items: center;
             justify-content: flex-start;
             padding: 0 10%;
+            /* RUTA CORREGIDA: ../header.png */
             background: radial-gradient(circle at center, rgba(138,43,226,0.15) 0%, #0a0a0a 70%), 
-                        url('header.png') center/cover no-repeat;
+                        url('../header.png') center/cover no-repeat;
             position: relative;
             overflow: hidden;
         }
@@ -457,43 +451,43 @@
 
     <div id="preloader">
         <div class="loader-circle"></div>
-        <div class="loader-text">Loading...</div>
+        <div class="loader-text">Espera...</div>
     </div>
 
     <header id="header">
         <div class="logo-text">VINTARA<span>.</span></div>
         <nav class="nav-center">
-            <a href="/">Home</a>
-            <a href="/descargables">Downloads</a>
-            <a href="https://truckersmp.com/vtc/81636/events">Events</a>
+            <a href="/es/">Inicio</a>
+            <a href="/descargables">Descargables</a>
+            <a href="https://truckersmp.com/vtc/81636/events">Eventos</a>
         </nav>
         
         <div class="header-actions">
-            <a href="/es/" class="lang-switch" onclick="cambiarIdiomaManual('es')">
-                <i class="fas fa-globe"></i> ES
+            <a href="/" class="lang-switch" onclick="cambiarIdiomaManual('en')">
+                <i class="fas fa-globe"></i> EN
             </a>
-
-            <a href="https://driverhub.vintara.xyz" class="login-btn">Login</a>
+            
+            <a href="https://driverhub.vintara.xyz" class="login-btn">Iniciar Sesión</a>
         </div>
     </header>
 
     <section class="hero" id="hero-section">
         <div class="hero-content">
             <h1>Social<br><span>Motors</span></h1>
-            <p>Drivers with passion and brotherhood</p>
+            <p>Conductores con pasion y hermandad</p>
             <div style="display: flex; gap: 1rem;">
-                <button class="login-btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" style="background: var(--text-main); color: #000;">Explore</button>
+                <button class="login-btn" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" style="background: var(--text-main); color: #000;">Explorar</button>
             </div>
         </div>
     </section>
 
     <div class="container reveal-on-scroll" id="about">
-        <h2 class="section-title">Our <span>Mission</span></h2>
+        <h2 class="section-title">Nuestra <span>Misión</span></h2>
         <div class="about-grid">
             <div class="glass-card">
                 <p style="font-size: 1.1rem; line-height: 1.8;">
-                    At <strong>VintaraVTC</strong>, we are not just a VTC, we are a collective. Our vision is clear: dominate the roads of ETS2 and ATS with style, professionalism, and brotherhood.<br><br>
-                    We seek to offer an experience free of toxicity and full of adrenaline. Every delivery counts, every kilometer adds up.
+                    En <strong>VintaraVTC</strong>, no solo somos una VTC, somos un colectivo. Nuestra visión es clara: dominar las carreteras de ETS2 y ATS con estilo, profesionalismo y hermandad.<br><br>
+                    Buscamos ofrecer una experiencia libre de toxicidad y llena de adrenalina. Cada entrega cuenta, cada kilómetro suma.
                 </p>
             </div>
             <div style="font-family: 'Kanit'; font-size: 10rem; line-height: 0.8; opacity: 0.1; font-weight: 900; font-style: italic; color: #fff;">
@@ -503,19 +497,19 @@
     </div>
 
     <div class="container reveal-on-scroll">
-        <h2 class="section-title">Official <span>Gallery</span></h2>
+        <h2 class="section-title">Galería <span>Oficial</span></h2>
         <div class="gallery-container">
             <div class="gallery-slide active">
-                <img src="gallery1.png" alt="Event 1">
-                <div class="gallery-caption">Internal Convoy</div>
+                <img src="../gallery1.png" alt="Evento 1">
+                <div class="gallery-caption">Convoy Interno</div>
             </div>
             <div class="gallery-slide">
-                <img src="gallery2.png" alt="Event 2">
-                <div class="gallery-caption">Chaos on the Route</div>
+                <img src="../gallery2.png" alt="Evento 2">
+                <div class="gallery-caption">Caos En La Ruta</div>
             </div>
             <div class="gallery-slide">
-                <img src="gallery3.png" alt="Event 3">
-                <div class="gallery-caption">The Ban Route</div>
+                <img src="../gallery3.png" alt="Evento 3">
+                <div class="gallery-caption">Ruta Del Ban</div>
             </div>
             <div class="gallery-nav">
                 <button class="nav-btn" id="prevBtn"><i class="fas fa-chevron-left"></i></button>
@@ -526,16 +520,16 @@
 
     <div class="container reveal-on-scroll" id="join">
         <div class="glass-card" style="text-align: center;">
-            <h2 class="section-title" style="margin-bottom: 1rem;">Ready to <span>Roll?</span></h2>
-            <p style="margin-bottom: 2rem; color: #ccc;">Mandatory requirements to join the team</p>
+            <h2 class="section-title" style="margin-bottom: 1rem;">¿Listo para <span>Rodar?</span></h2>
+            <p style="margin-bottom: 2rem; color: #ccc;">Requisitos obligatorios para ingresar al equipo</p>
             <ul class="req-list" style="text-align: left; display: inline-block; margin-bottom: 2rem;">
-                <li><i class="fas fa-check-circle"></i> Legal copy of Euro Truck Simulator 2 or ATS</li>
-                <li><i class="fas fa-check-circle"></i> Active account on TruckersMP</li>
-                <li><i class="fas fa-check-circle"></i> Active account on Discord</li>
-                <li><i class="fas fa-ban"></i>No "Suspicious Account" status on Discord</li>
+                <li><i class="fas fa-check-circle"></i> Copia legal de Euro Truck Simulator 2 o ATS</li>
+                <li><i class="fas fa-check-circle"></i> Cuenta activa en TruckersMP</li>
+                <li><i class="fas fa-check-circle"></i> Cuenta activa en Discord</li>
+                <li><i class="fas fa-ban"></i>No tener activado "Cuenta Sospechosa" en discord</li>
             </ul>
             <br>
-            <button class="login-btn" onclick="window.open('https://discord.gg/UY42pmqvnw', '_blank')">JOIN DISCORD</button>
+            <button class="login-btn" onclick="window.open('https://discord.gg/UY42pmqvnw', '_blank')">UNIRSE AL DISCORD</button>
         </div>
     </div>
 
@@ -549,13 +543,13 @@
         </div>
 
         <div class="footer-links">
-            <a href="/politicas">Terms of Service</a>
-            <a href="/privacidad">Privacy Policy</a>
+            <a href="/politicas">Términos de servicio</a>
+            <a href="/privacidad">Política de privacidad</a>
         </div>
     </footer>
 
     <script>
-        // --- 1. PRELOADER LOGIC ---
+        // --- 1. PRELOADER LOGIC (NUEVO) ---
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             const heroSection = document.getElementById('hero-section');
@@ -563,9 +557,9 @@
 
             setTimeout(() => {
                 preloader.classList.add('hide-loader');
-                body.classList.add('loaded'); 
-                heroSection.classList.add('hero-animate'); 
-            }, 500); 
+                body.classList.add('loaded'); // Reactiva el scroll
+                heroSection.classList.add('hero-animate'); // Dispara animaciones del Hero
+            }, 500); // 0.5s de buffer para que no sea brusco
         });
 
         // --- 2. Header Scroll ---
@@ -587,7 +581,7 @@
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // --- 4. Gallery ---
+        // --- 4. Galería ---
         const slides = document.querySelectorAll('.gallery-slide');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');

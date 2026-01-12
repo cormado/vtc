@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Vintara Logistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;1,800&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="logo.png">
+    
+    <script>
+        // --- REDIRECCIÓN ESPECÍFICA (privacy -> privacidad) ---
+        
+        function irAEspanol() {
+            window.location.href = '/es/privacidad.html';
+        }
+
+        // 1. Preferencia Manual
+        if (localStorage.getItem('userLang') === 'en') {
+            // Se queda aquí
+        } else if (localStorage.getItem('userLang') === 'es') {
+            irAEspanol();
+        } else {
+            // 2. Detección Automática
+            const paisesHispanos = ['AR', 'BO', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'SV', 'GT', 'HN', 'MX', 'NI', 'PA', 'PY', 'PE', 'PR', 'UY', 'VE'];
+            
+            fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                if (paisesHispanos.includes(data.country_code)) {
+                    irAEspanol();
+                }
+            })
+            .catch(err => {
+                const navLang = navigator.language || navigator.userLanguage;
+                if (navLang.startsWith('es')) {
+                    irAEspanol();
+                }
+            });
+        }
+
+        function cambiarIdiomaManual(lang) {
+            localStorage.setItem('userLang', lang);
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-purple: #8A2BE2;
+            --accent-red: #dd00ff;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+            overflow-y: hidden;
+        }
+
+        body.loaded { overflow-y: auto; }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        .loader-circle {
+            width: 60px; height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top: 4px solid var(--accent-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
+        }
+
+        .loader-text {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            text-transform: uppercase;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+        
+        .hide-loader { opacity: 0; visibility: hidden; pointer-events: none; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed;
+            top: 0; width: 100%;
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--accent-purple);
+            padding: 1rem 5%;
+        }
+
+        .logo-text {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 800;
+            font-style: italic;
+            font-size: 2rem;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+        }
+        .logo-text span { color: var(--accent-purple); }
+
+        .nav-center { display: flex; gap: 3rem; }
+        .nav-center a {
+            text-decoration: none;
+            color: var(--text-main);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 1.1rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-center a:hover { color: var(--accent-purple); }
+
+        .header-actions { display: flex; align-items: center; gap: 15px; }
+
+        .login-btn {
+            padding: 0.6rem 2rem;
+            background: transparent;
+            color: #fff;
+            border: 1px solid var(--accent-red);
+            font-family: 'Kanit', sans-serif;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            cursor: pointer;
+            display: inline-block;
+        }
+        .login-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--accent-red); z-index: -1;
+            transform: translateX(-101%); transition: transform 0.3s ease;
+        }
+        .login-btn:hover::before { transform: translateX(0); }
+        .login-btn:hover { box-shadow: 0 0 15px var(--accent-red); }
+
+        .lang-switch {
+            color: var(--text-muted);
+            font-family: 'Kanit', sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.4rem 0.8rem;
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .lang-switch:hover { border-color: var(--accent-purple); color: #fff; }
+
+        /* --- HERO --- */
+        .hero {
+            height: 50vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, rgba(138,43,226,0.15) 0%, #0a0a0a 70%), 
+                        url('header.png') center/cover no-repeat;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        .hero::before {
+            content: ''; position: absolute; top:0; left:0; width:100%; height:100%;
+            background: linear-gradient(0deg, #0a0a0a 0%, rgba(10,10,10,0.7) 100%);
+            z-index: 1;
+        }
+
+        .hero-content { position: relative; z-index: 2; text-align: center; }
+
+        .hero h1 {
+            font-family: 'Kanit', sans-serif;
+            font-weight: 900;
+            font-style: italic;
+            font-size: 4rem;
+            text-transform: uppercase;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+            opacity: 0; transform: translateY(20px);
+        }
+
+        .hero-animate h1 { animation: textReveal 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards; }
+        .hero h1 span { color: #fff; -webkit-text-stroke: 0; text-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
+        @keyframes textReveal { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- CONTENT --- */
+        .container { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+
+        .glass-card {
+            background: var(--glass-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 3rem;
+            backdrop-filter: blur(10px);
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .glass-card.visible { opacity: 1; transform: translateY(0); }
+
+        .glass-card::after {
+            content: ''; position: absolute; top: -1px; right: -1px;
+            width: 30px; height: 30px;
+            border-top: 3px solid var(--accent-red);
+            border-right: 3px solid var(--accent-red);
+        }
+
+        h2 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--text-main);
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--accent-purple);
+            display: inline-block;
+            padding-bottom: 0.5rem;
+        }
+
+        h3 {
+            font-family: 'Kanit', sans-serif;
+            font-size: 1.8rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-red);
+            text-transform: uppercase;
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 1.5rem;
+            color: #ccc;
+        }
+
+        b { color: #fff; font-weight: 700; }
+
+        ul { list-style: none; margin: 1.5rem 0; }
+        ul li {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding-left: 2rem;
+            position: relative;
+            color: #ddd;
+        }
+        ul li::before {
+            content: '\f054';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--accent-purple);
+            font-size: 1rem;
+            top: 2px;
+        }
+
+        .last-update {
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-family: 'Kanit', sans-serif;
+            font-size: 0.9rem;
+            text-align: right;
+            color: var(--text-muted);
+        }
+
+        footer {
+            background: #050505;
+            padding: 3rem;
+            text-align: center;
+            border-top: 1px solid #222;
+            margin-top: 4rem;
+        }
+
+        .social-links { margin: 2rem 0; }
+        .social-links a {
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            margin: 0 1rem;
+            transition: all 0.3s;
+        }
+        .social-links a:hover { color: var(--accent-red); transform: translateY(-3px); }
+
+        .footer-links {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .footer-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin: 0 1rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s;
+        }
+        .footer-links a:hover, .footer-links a.active { color: #fff; text-decoration: underline; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            .nav-center { display: none; }
+            .glass-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <div class="loader-circle"></div>
+        <div class="loader-text">Loading...</div>
+    </div>
+
+    <header id="header">
+        <div class="logo-text">VINTARA<span>.</span></div>
+        <nav class="nav-center">
+            <a href="/">Home</a>
+            <a href="/downloads.html">Downloads</a>
+            <a href="https://truckersmp.com/vtc/81636/events">Events</a>
+        </nav>
+        
+        <div class="header-actions">
+            <a href="/es/privacidad.html" class="lang-switch" onclick="cambiarIdiomaManual('es')">
+                <i class="fas fa-globe"></i> ES
+            </a>
+            <a href="https://driverhub.vintara.xyz" class="login-btn">Login</a>
+        </div>
+    </header>
+
+    <section class="hero" id="hero-section">
+        <div class="hero-content">
+            <h1>Privacy <span>Policy</span></h1>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="glass-card reveal-on-scroll">
+            <h2>Privacy Policy</h2>
+            <p>
+                The privacy of our members is important to Vintara VTC. This policy explains what information we collect and how we use it in the context of our Virtual Trucking Company (VTC).
+            </p>
+
+            <h3>1. Collected Information</h3>
+            <p>We collect the following information necessary for the operation and management of the VTC:</p>
+            <ul>
+                <li><b>Platform Identification Information:</b> Usernames and IDs from platforms used for the VTC, primarily <b>Discord</b> and <b>TruckersMP</b>.</li>
+                <li><b>Activity Data:</b> Driving hours, kilometers traveled, and convoy participation, collected via VTC tracking tools (if used) or the TruckersMP API.</li>
+                <li><b>Recruitment Process Information:</b> Responses provided during the VTC application process (age, region, etc.).</li>
+            </ul>
+
+            <h3>2. Use of Information</h3>
+            <p>The collected information is used exclusively for the following purposes:</p>
+            <ul>
+                <li><b>Membership Management:</b> Verify identity and member activity.</li>
+                <li><b>Communication:</b> Send notifications about events, convoys, or rule updates via Discord.</li>
+                <li><b>VTC Improvement:</b> Analyze activity trends to improve the community experience.</li>
+                <li><b>Image Usage:</b> Any photos you send to our Discord server may be used for our media or website.</li>
+            </ul>
+
+            <h3>3. Sharing Information with Third Parties</h3>
+            <p>
+                Vintara VTC <b>does not share</b> identifiable personal information (such as usernames or private Discord data) with third parties outside the VTC administration, <b>except</b>:
+            </p>
+            <ul>
+                <li>When required by law or platform rules (Discord, TruckersMP).</li>
+                <li>Public activity data (kilometers, ranks) may be visible on our website or the TruckersMP VTC profile.</li>
+            </ul>
+
+            <h3>4. Data Security</h3>
+            <p>
+                We implement reasonable security measures to protect information against unauthorized access. However, please remember that no method of transmission over the Internet or electronic storage is 100% secure.
+            </p>
+
+            <h3>5. User Rights</h3>
+            <p>
+                If you are a member, you have the right to request the information we hold about you. If you decide to leave the VTC, most of your data related to VTC activity will be deleted from our internal records, although your history on public platforms (TruckersMP) may remain subject to their own policies.
+            </p>
+
+            <h3>6. Contact</h3>
+            <p>
+                If you have questions or concerns about this Privacy Policy, please contact an <b>Administrator</b> or <b>Owner</b> of Vintara VTC through our Discord server.
+            </p>
+
+            <p class="last-update"><b>Last Update:</b> December 07, 2025</p>
+        </div>
+    </div>
+
+    <footer>
+        <p style="opacity: 0.5;">© 2026 Vintara Logistics. Design by Vintara Studio.</p>
+        
+        <div class="social-links">
+            <a href="https://www.tiktok.com/@chapulinesvtc" target="_blank"><i class="fab fa-tiktok"></i></a>
+            <a href="https://discord.gg/UY42pmqvnw" target="_blank"><i class="fab fa-discord"></i></a>
+            <a href="https://www.youtube.com/@chapulinesvtc" target="_blank"><i class="fab fa-youtube"></i></a>
+        </div>
+
+        <div class="footer-links">
+            <a href="/terminos">Terms of Service</a>
+            <a href="/privacy.html" class="active">Privacy Policy</a>
+        </div>
+    </footer>
+
+    <script>
+        // --- PRELOADER & HERO ANIMATION ---
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const heroSection = document.getElementById('hero-section');
+            const body = document.body;
+
+            setTimeout(() => {
+                preloader.classList.add('hide-loader');
+                body.classList.add('loaded');
+                heroSection.classList.add('hero-animate');
+            }, 500);
+        });
+
+        // --- HEADER SCROLL ---
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+
+        // --- REVEAL ON SCROLL ---
+        const revealElements = document.querySelectorAll('.reveal-on-scroll');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        revealElements.forEach(el => observer.observe(el));
+    </script>
+</body>
+</html>

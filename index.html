@@ -163,7 +163,25 @@
             font-size: 1.1rem;
             position: relative;
             transition: color 0.3s;
+        
         }
+         /* Estilo especial para Vintara Control */
+        .nav-center a.vintara-control {
+        background: linear-gradient(90deg, var(--accent-purple), var(--accent-red));
+        background-clip: text;
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 800; /* Más grueso para que destaque */
+        text-shadow: 0 0 20px rgba(221, 0, 255, 0.3); /* Brillo suave */
+        transition: all 0.3s ease;
+        border-bottom: 2px solid transparent; /* Para evitar saltos al hover */
+    }
+
+        .nav-center a.vintara-control:hover {
+        text-shadow: 0 0 30px rgba(221, 0, 255, 0.8); /* Brillo fuerte al pasar mouse */
+        transform: scale(1.05); /* Pequeño zoom */
+        -webkit-text-fill-color: #fff; /* Se vuelve blanco al hover para contraste */
+    }
         .nav-center a:hover { color: var(--accent-purple); }
 
         /* Contenedor de botones derechos */
@@ -461,21 +479,24 @@
     </div>
 
     <header id="header">
-        <div class="logo-text">VINTARA<span>.</span></div>
-        <nav class="nav-center">
-            <a href="/">Home</a>
-            <a href="/descargables">Downloads</a>
-            <a href="https://truckersmp.com/vtc/81636/events">Events</a>
-        </nav>
+    <div class="logo-text">VINTARA<span>.</span></div>
+    <nav class="nav-center">
+        <a href="/">Home</a>
+        <a href="/downloads.html">Downloads</a>
+        <a href="https://truckersmp.com/vtc/81636/events">Events</a>
         
-        <div class="header-actions">
-            <a href="/es/" class="lang-switch" onclick="cambiarIdiomaManual('es')">
-                <i class="fas fa-globe"></i> ES
-            </a>
-
-            <a href="https://driverhub.vintara.xyz" class="login-btn">Login</a>
-        </div>
-    </header>
+        <a href="/convoycontrol" class="vintara-control">
+            <i class="fas fa-satellite-dish" style="font-size:0.8em; margin-right:5px; color:var(--accent-red);"></i> Vintara Control
+        </a>
+    </nav>
+    
+    <div class="header-actions">
+        <a href="/es/" class="lang-switch" onclick="cambiarIdiomaManual('es')">
+            <i class="fas fa-globe"></i> ES
+        </a>
+        <a href="https://driverhub.vintara.xyz" class="login-btn">Login</a>
+    </div>
+</header>
 
     <section class="hero" id="hero-section">
         <div class="hero-content">

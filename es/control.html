@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vintara Control - Servicios de Escolta</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Kanit:ital,wght@0,300;0,600;1,800;1,900&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="../logo_control.png">
+    
+    <script>
+        // --- DETECCIÓN DE IDIOMA (Versión Español) ---
+        
+        function irAIngles() {
+            window.location.href = '/control.html';
+        }
+
+        // 1. Preferencia Manual
+        if (localStorage.getItem('userLang') === 'en') {
+            irAIngles();
+        } else if (localStorage.getItem('userLang') === 'es') {
+            // Se queda aquí
+        } else {
+            // 2. Detección Automática (Si NO es hispano, mandar a inglés)
+            const paisesHispanos = ['AR', 'BO', 'CL', 'CO', 'CR', 'CU', 'DO', 'EC', 'SV', 'GT', 'HN', 'MX', 'NI', 'PA', 'PY', 'PE', 'PR', 'UY', 'VE'];
+            
+            fetch('https://ipapi.co/json/')
+            .then(res => res.json())
+            .then(data => {
+                if (!paisesHispanos.includes(data.country_code)) {
+                    irAIngles();
+                }
+            })
+            .catch(err => {
+                const navLang = navigator.language || navigator.userLanguage;
+                if (!navLang.startsWith('es')) {
+                    irAIngles();
+                }
+            });
+        }
+
+        function cambiarIdioma(lang) {
+            localStorage.setItem('userLang', lang);
+            if(lang === 'en') irAIngles();
+        }
+    </script>
+
+    <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --accent-purple: #8A2BE2;
+            --accent-red: #dd00ff; 
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-main);
+            overflow-x: hidden;
+            overflow-y: hidden; 
+        }
+
+        body.loaded { overflow-y: auto; }
+
+        /* --- PRELOADER --- */
+        #preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: var(--bg-primary);
+            z-index: 9999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+        .loader-shield {
+            font-size: 60px; color: var(--accent-purple);
+            animation: pulse 1s infinite; margin-bottom: 20px;
+            text-shadow: 0 0 20px var(--accent-red);
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+        .hide-loader { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* --- HEADER --- */
+        header {
+            position: fixed; top: 0; width: 100%; padding: 1.5rem 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; transition: all 0.4s ease; backdrop-filter: blur(5px);
+        }
+        header.scrolled {
+            background-color: rgba(10, 10, 10, 0.95);
+            border-bottom: 1px solid var(--accent-purple);
+            padding: 1rem 5%;
+        }
+        .logo-text {
+            font-family: 'Kanit', sans-serif; font-weight: 800; font-style: italic;
+            font-size: 1.8rem; color: #fff; text-transform: uppercase;
+        }
+        .logo-text span { color: var(--accent-purple); }
+        .logo-sub { font-size: 0.8rem; letter-spacing: 4px; color: var(--accent-red); display: block; margin-top: -5px; }
+
+        .nav-center { display: flex; gap: 3rem; }
+        .nav-center a {
+            text-decoration: none; color: var(--text-main);
+            font-family: 'Kanit', sans-serif; font-weight: 600;
+            text-transform: uppercase; font-size: 1rem; transition: color 0.3s;
+        }
+        .nav-center a:hover { color: var(--accent-purple); }
+
+        .reserve-btn {
+            padding: 0.6rem 2rem; background: transparent; color: #fff;
+            border: 1px solid var(--accent-purple); font-family: 'Kanit', sans-serif;
+            text-transform: uppercase; text-decoration: none; font-weight: 600; position: relative;
+            overflow: hidden; transition: all 0.3s ease;
+            clip-path: polygon(10% 0, 100% 0, 100% 70%, 90% 100%, 0 100%, 0 30%);
+            display: inline-flex; align-items: center; gap: 10px;
+        }
+        .reserve-btn::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(45deg, var(--accent-purple), var(--accent-red));
+            z-index: -1; transform: translateX(-101%); transition: transform 0.3s ease;
+        }
+        .reserve-btn:hover::before { transform: translateX(0); }
+        .reserve-btn:hover { box-shadow: 0 0 20px rgba(138, 43, 226, 0.5); border-color: transparent; }
+        .reserve-btn.solid { background: linear-gradient(45deg, var(--accent-purple), var(--accent-red)); border: none; }
+
+        .lang-switch {
+            color: var(--text-muted); font-family: 'Kanit', sans-serif; font-weight: 600;
+            text-decoration: none; font-size: 0.9rem; border: 1px solid rgba(255,255,255,0.2);
+            padding: 0.4rem 0.8rem; transition: 0.3s; margin-right: 15px;
+        }
+        .lang-switch:hover { border-color: var(--accent-purple); color: #fff; }
+
+        /* --- HERO --- */
+        .hero {
+            height: 100vh; display: flex; align-items: center; justify-content: flex-start;
+            padding: 0 10%;
+            background: radial-gradient(circle at center, rgba(10,10,10,0.7) 0%, #0a0a0a 90%), 
+                        url('https://static.truckersmp.com/images/vtc/logo/81636.png?1737158785') center/cover no-repeat; 
+            background-size: cover; position: relative; overflow: hidden;
+        }
+        .hero-content { position: relative; z-index: 2; max-width: 900px; }
+        .hero h1 {
+            font-family: 'Kanit', sans-serif; font-weight: 900; font-style: italic;
+            font-size: 5rem; line-height: 0.9; text-transform: uppercase; margin-bottom: 1rem;
+            color: #fff; text-shadow: 0 0 30px rgba(0,0,0,0.8);
+            opacity: 0; transform: translateX(-50px);
+        }
+        .hero-animate h1 { animation: textReveal 1s cubic-bezier(0.215, 0.610, 0.355, 1.000) forwards; }
+        .hero h1 span { color: transparent; -webkit-text-stroke: 2px var(--accent-purple); display: block; font-size: 3.5rem; }
+        .hero p {
+            font-size: 1.3rem; color: #ddd; margin-bottom: 2.5rem;
+            border-left: 4px solid var(--accent-red); padding-left: 1.5rem;
+            opacity: 0; max-width: 600px; background: rgba(0,0,0,0.5);
+        }
+        .hero-animate p { animation: fadeInUp 1s 0.5s forwards; }
+        .hero-animate .cta-wrapper { animation: fadeInUp 1s 0.8s forwards; opacity: 0; }
+        @keyframes textReveal { to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+
+        /* --- GLOBAL STYLES --- */
+        .container { max-width: 1300px; margin: 0 auto; padding: 6rem 2rem; }
+        .section-title {
+            font-family: 'Kanit', sans-serif; font-size: 3rem; font-weight: 800;
+            font-style: italic; text-transform: uppercase; margin-bottom: 3rem; text-align: center;
+        }
+        .section-title span { 
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-red));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        /* --- ABOUT SECTION --- */
+        .about-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 4rem; align-items: center; }
+        .about-text h3 {
+            font-family: 'Kanit'; font-size: 1.8rem; color: var(--accent-purple);
+            margin-bottom: 1rem; text-transform: uppercase;
+        }
+        .about-text p { font-size: 1.1rem; line-height: 1.8; color: #ccc; margin-bottom: 1rem; }
+        .big-typography {
+            font-family: 'Kanit'; font-size: 8rem; line-height: 0.8; opacity: 0.1;
+            font-weight: 900; font-style: italic; color: #fff; text-align: right;
+            pointer-events: none;
+        }
+
+        /* --- GALLERY SECTION --- */
+        .gallery-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .gallery-item {
+            height: 250px; border-radius: 5px; overflow: hidden;
+            position: relative; border: 1px solid rgba(255,255,255,0.1);
+            background: #151515; 
+            display: flex; align-items: center; justify-content: center;
+            text-align: center;
+        }
+        .gallery-item img {
+            width: 100%; height: 100%; object-fit: cover;
+            transition: transform 0.5s ease;
+            position: absolute; top:0; left:0; z-index: 2;
+        }
+        .gallery-item:hover img { transform: scale(1.1); }
+        .fallback-text {
+            color: var(--text-muted); font-family: 'Kanit'; text-transform: uppercase;
+            font-size: 0.9rem; z-index: 1; letter-spacing: 2px;
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+        }
+
+        /* --- PARTNERS SECTION --- */
+        .partners-container {
+            display: flex; justify-content: center; align-items: center;
+            flex-wrap: wrap; gap: 3rem; margin-top: 3rem;
+        }
+        .partner-box {
+            width: 180px; height: 120px;
+            display: flex; align-items: center; justify-content: center;
+            background: var(--glass-bg); border-radius: 10px;
+            transition: all 0.3s ease; border: 1px solid transparent;
+        }
+        .partner-box img {
+            max-width: 80%; max-height: 80%;
+            filter: grayscale(100%); opacity: 0.6;
+            transition: all 0.3s ease;
+        }
+        .partner-box:hover { background: rgba(255,255,255,0.08); border-color: var(--accent-purple); transform: translateY(-5px); }
+        .partner-box:hover img { filter: grayscale(0%); opacity: 1; }
+
+        /* --- SERVICES & STATS --- */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .glass-card {
+            background: var(--glass-bg); border: 1px solid rgba(255,255,255,0.1);
+            padding: 2.5rem; backdrop-filter: blur(10px);
+            position: relative; transition: transform 0.3s ease;
+        }
+        .glass-card:hover { transform: translateY(-10px); border-color: var(--accent-purple); }
+        .glass-card i { font-size: 3rem; margin-bottom: 1.5rem; background: linear-gradient(180deg, #fff, var(--text-muted)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glass-card h3 { font-family: 'Kanit', sans-serif; font-size: 1.5rem; text-transform: uppercase; margin-bottom: 1rem; color: var(--accent-purple); }
+        .stats-bar {
+            background: #0f0f0f; border-top: 1px solid #222; border-bottom: 1px solid #222;
+            padding: 3rem 0; margin: 4rem 0; display: flex; justify-content: center; gap: 5rem; flex-wrap: wrap;
+        }
+        .stat-item { text-align: center; }
+        .stat-number { font-family: 'Kanit'; font-size: 3.5rem; font-weight: 800; color: #fff; line-height: 1; }
+        .stat-label { font-family: 'Montserrat'; color: var(--accent-red); text-transform: uppercase; font-size: 0.9rem; letter-spacing: 2px; }
+
+        /* --- FOOTER --- */
+        footer { background: #050505; padding: 3rem; text-align: center; border-top: 1px solid #222; }
+        .footer-logo { font-family: 'Kanit'; font-size: 1.5rem; color: #555; margin-bottom: 1rem; display: block; }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 3rem; } .hero h1 span { font-size: 2rem; }
+            .nav-center { display: none; } .about-grid { grid-template-columns: 1fr; }
+            .big-typography { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="preloader">
+        <i class="fas fa-shield-alt loader-shield"></i>
+        <div style="font-family: 'Kanit'; letter-spacing: 5px;">SISTEMA OK</div>
+    </div>
+
+    <header id="header">
+        <div class="logo-wrapper">
+            <div class="logo-text">VINTARA<span>.</span></div>
+            <span class="logo-sub">CONTROL DIVISION</span>
+        </div>
+        <nav class="nav-center">
+            <a href="/es/">Vintara Inicio</a>
+            <a href="#about">Nosotros</a>
+            <a href="#services">Servicios</a>
+            <a href="#gallery">Galería</a>
+        </nav>
+        <div class="header-actions">
+            <a href="#" class="lang-switch" onclick="cambiarIdioma('en')"><i class="fas fa-globe"></i> EN</a>
+            
+            <a href="https://discord.gg/VfvKKsk9yx" target="_blank" class="reserve-btn">
+                <i class="fab fa-discord"></i> Reserva tu Evento
+            </a>
+        </div>
+    </header>
+
+    <section class="hero" id="hero-section">
+        <div class="hero-content">
+            <h1>CONTROL DE<br><span>CONVOYS PROFESIONAL</span></h1>
+            <p>Garantizamos la seguridad de tu ruta. Coordinación táctica, bloqueo de intersecciones y logística avanzada para eventos masivos.</p>
+            <div class="cta-wrapper" style="display: flex; gap: 1rem;">
+                <a href="https://discord.gg/VfvKKsk9yx" target="_blank" class="reserve-btn solid">SOLICITAR ESCOLTA</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container" id="about">
+        <h2 class="section-title">Sobre <span>Nosotros</span></h2>
+        <div class="about-grid">
+            <div class="about-text glass-card">
+                <h3><i class="fas fa-user-shield"></i> Disciplina y Orden</h3>
+                <p>
+                    Vintara Control nace de la necesidad de profesionalizar el caos. Somos una división especializada dedicada exclusivamente a la gestión de tráfico y seguridad en rutas virtuales.
+                </p>
+                <p>
+                    No somos simples conductores; somos operadores tácticos entrenados para anticipar incidentes, bloquear intersecciones peligrosas y asegurar que el convoy principal llegue a su destino sin interrupciones.
+                </p>
+            </div>
+            <div class="big-typography">
+                SEC<br>URI<br>TY
+            </div>
+        </div>
+    </div>
+
+    <div class="stats-bar" id="stats">
+        <div class="stat-item"><div class="stat-number">100%</div><div class="stat-label">Rutas Seguras</div></div>
+        <div class="stat-item"><div class="stat-number">50+</div><div class="stat-label">Eventos Cubiertos</div></div>
+        <div class="stat-item"><div class="stat-number">24/7</div><div class="stat-label">Soporte Logístico</div></div>
+    </div>
+
+    <div class="container" id="services">
+        <h2 class="section-title">Nuestros <span>Protocolos</span></h2>
+        <div class="services-grid">
+            <div class="glass-card">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Planificación de Ruta</h3>
+                <p style="color: #aaa; line-height: 1.6;">Diseñamos itinerarios libres de conflictos y optimizados para convoyes de gran tonelaje.</p>
+            </div>
+            <div class="glass-card">
+                <i class="fas fa-shield-alt"></i>
+                <h3>Escolta Táctica</h3>
+                <p style="color: #aaa; line-height: 1.6;">Unidades CC posicionadas para bloqueo de intersecciones (Blocking) y asistencia trasera.</p>
+            </div>
+            <div class="glass-card">
+                <i class="fas fa-satellite-dish"></i>
+                <h3>Comunicación Directa</h3>
+                <p style="color: #aaa; line-height: 1.6;">Coordinación por voz en tiempo real con el líder del convoy.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="gallery">
+        <h2 class="section-title">Galería <span>Operativa</span></h2>
+        <div class="gallery-grid">
+            
+            <div class="gallery-item">
+                <div class="fallback-text"><i class="fas fa-eye-slash fa-2x"></i><br>Imagen No Disponible</div>
+                <img src="../event1.jpg" onerror="this.style.display='none'"> 
+            </div>
+
+            <div class="gallery-item">
+                <div class="fallback-text"><i class="fas fa-eye-slash fa-2x"></i><br>Imagen No Disponible</div>
+                <img src="../event2.jpg" onerror="this.style.display='none'">
+            </div>
+
+            <div class="gallery-item">
+                <div class="fallback-text"><i class="fas fa-eye-slash fa-2x"></i><br>Imagen No Disponible</div>
+                <img src="../ruta_que_no_existe.jpg" onerror="this.style.display='none'">
+            </div>
+
+            <div class="gallery-item">
+                <div class="fallback-text"><i class="fas fa-eye-slash fa-2x"></i><br>Imagen No Disponible</div>
+                <img src="../event4.jpg" onerror="this.style.display='none'">
+            </div>
+
+            <div class="gallery-item">
+                <div class="fallback-text"><i class="fas fa-eye-slash fa-2x"></i><br>Imagen No Disponible</div>
+                <img src="../event5.jpg" onerror="this.style.display='none'">
+            </div>
+
+            <div class="gallery-item">
+                <div class="fallback-text"><i class="fas fa-eye-slash fa-2x"></i><br>Imagen No Disponible</div>
+                <img src="../event6.jpg" onerror="this.style.display='none'">
+            </div>
+
+        </div>
+    </div>
+
+    <div class="container" id="partners">
+        <h2 class="section-title">Confían en <span>Nosotros</span></h2>
+        <p style="text-align: center; color: #888;">Empresas que han dejado su seguridad en nuestras manos</p>
+        
+        <div class="partners-container">
+            
+            <div class="partner-box" title="Vintara Logistics">
+                <img src="../vintara.png" alt="Vintara Logo">
+            </div>
+            <div class="partner-box" title="Transportes Costa Sudamericana">
+                <img src="../tcs.png" alt="TCS Logo">
+            </div>
+            </div>
+    </div>
+
+    <div class="container" style="text-align: center; padding-top: 0;">
+        <div class="glass-card" style="border: 1px solid var(--accent-red);">
+            <h2 style="font-family: 'Kanit'; font-size: 2.5rem; margin-bottom: 1rem;">¿Organizando un evento masivo?</h2>
+            <p style="margin-bottom: 2rem;">No dejes la seguridad al azar. Contrata a los profesionales.</p>
+            <a href="https://discord.gg/VfvKKsk9yx" target="_blank" class="reserve-btn solid" style="font-size: 1.2rem; padding: 1rem 3rem;">
+                RESERVAR FECHA EN DISCORD
+            </a>
+        </div>
+    </div>
+
+    <footer>
+        <span class="footer-logo">VINTARA CONTROL</span>
+        <p style="opacity: 0.5;">Parte de Vintara Logistics Group.</p>
+        <div style="margin-top: 2rem;">
+            <a href="/es/" style="color: #666; text-decoration: none; margin: 0 10px;">Volver al Inicio</a>
+        </div>
+    </footer>
+
+    <script>
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            const heroSection = document.getElementById('hero-section');
+            const body = document.body;
+            setTimeout(() => {
+                preloader.classList.add('hide-loader');
+                body.classList.add('loaded'); 
+                heroSection.classList.add('hero-animate'); 
+            }, 600); 
+        });
+
+        window.addEventListener('scroll', () => {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) header.classList.add('scrolled');
+            else header.classList.remove('scrolled');
+        });
+    </script>
+</body>
+</html>
